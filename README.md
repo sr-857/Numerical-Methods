@@ -57,60 +57,60 @@ Numerical methods are the cornerstone of scientific computing, engineering, and 
 
 ### Root-Finding Methods
 
-*   **Bisection Method**: Finds a root of $f(x) = 0$ in $[a, b]$ where $f(a) \cdot f(b) < 0$.
+*   **[Bisection Method](./Bisection_Method.c)**: Finds a root of $f(x) = 0$ in $[a, b]$ where $f(a) \cdot f(b) < 0$.
     $$c = a + \frac{b - a}{2}$$
     *Order of Convergence*: $1$ (Linear).
-*   **Regula Falsi (False Position) Method**: Finds root via the secant line intercept.
+*   **[Regula Falsi (False Position) Method](./Regula_Falsi_Method.c)**: Finds root via the secant line intercept.
     $$c = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}$$
     *Order of Convergence*: $1$ (Linear).
-*   **Newton-Raphson Method**: Uses tangent slope approximations.
+*   **[Newton-Raphson Method](./Newton_Raphson.c)**: Uses tangent slope approximations.
     $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
     *Order of Convergence*: $2$ (Quadratic).
-*   **Secant Method**: Approximates the derivative using two historical points.
+*   **[Secant Method](./Secant_Method.c)**: Approximates the derivative using two historical points.
     $$x_{n+1} = \frac{x_{n-1} \cdot f(x_n) - x_n \cdot f(x_{n-1})}{f(x_n) - f(x_{n-1})}$$
     *Order of Convergence*: $\approx 1.618$ (Superlinear).
-*   **Fixed-Point Iteration Method**: Rewrites $f(x) = 0$ as $x = g(x)$ and iterates.
+*   **[Fixed-Point Iteration Method](./Iteration_Method.c)**: Rewrites $f(x) = 0$ as $x = g(x)$ and iterates.
     $$x_{n+1} = g(x_n)$$
     *Convergence Condition*: $|g'(x)| < 1$ (Contraction Mapping Theorem).
 
 ### Interpolation Methods
 
-*   **Newton Forward Interpolation**: Used when target value is near the beginning of equally spaced data.
+*   **[Newton Forward Interpolation](./Newton_Forward_Interpolation_Method.c)**: Used when target value is near the beginning of equally spaced data.
     $$y(x) = y_0 + u \Delta y_0 + \frac{u(u-1)}{2!} \Delta^2 y_0 + \dots + \frac{u(u-1)\dots(u-n+1)}{n!} \Delta^n y_0$$
     where $u = \frac{x - x_0}{h}$.
-*   **Newton Backward Interpolation**: Used when target value is near the end of equally spaced data.
+*   **[Newton Backward Interpolation](./Newton_Backward_Interpolation_Method.c)**: Used when target value is near the end of equally spaced data.
     $$y(x) = y_n + u \nabla y_n + \frac{u(u+1)}{2!} \nabla^2 y_n + \dots + \frac{u(u+1)\dots(u+n-1)}{n!} \nabla^n y_n$$
     where $u = \frac{x - x_n}{h}$.
-*   **Lagrange Interpolation**: For arbitrarily spaced data points.
+*   **[Lagrange Interpolation](./Lagrange_Interpolation_Method.c)**: For arbitrarily spaced data points.
     $$y(x) = \sum_{i=0}^{n-1} y_i \prod_{j \neq i} \frac{x - x_j}{x_i - x_j}$$
 
 ### Systems of Linear Equations
 
-*   **Gauss Elimination (with Partial Pivoting)**: Converts augmented matrix $[A|B]$ to upper triangular form, then solves via back substitution.
-*   **Gauss Jordan (with Partial Pivoting)**: Converts augmented matrix $[A|B]$ to diagonal form, solving the variables directly.
-*   **Gauss Jacobi Method (Iterative)**: Iterates to solve linear systems. Requires diagonal dominance.
+*   **[Gauss Elimination (with Partial Pivoting)](./Gauss_Elimination.c)**: Converts augmented matrix $[A|B]$ to upper triangular form, then solves via back substitution.
+*   **[Gauss Jordan (with Partial Pivoting)](./Gauss_Jordan.c)**: Converts augmented matrix $[A|B]$ to diagonal form, solving the variables directly.
+*   **[Gauss Jacobi Method (Iterative)](./Gauss_Jacobi.c)**: Iterates to solve linear systems. Requires diagonal dominance.
     $$x_i^{(k+1)} = \frac{b_i - \sum_{j \neq i} a_{ij} x_j^{(k)}}{a_{ii}}$$
-*   **Gauss Seidel Method (Iterative)**: Uses updated values immediately for faster convergence.
+*   **[Gauss Seidel Method (Iterative)](./Gauss_Seidel.c)**: Uses updated values immediately for faster convergence.
     $$x_i^{(k+1)} = \frac{b_i - \sum_{j < i} a_{ij} x_j^{(k+1)} - \sum_{j > i} a_{ij} x_j^{(k)}}{a_{ii}}$$
-*   **Matrix Inversion (Gauss-Jordan)**: Converts $[A|I]$ to $[I|A^{-1}]$ using elementary row operations.
+*   **[Matrix Inversion (Gauss-Jordan)](./Matrix_Inversion.c)**: Converts $[A|I]$ to $[I|A^{-1}]$ using elementary row operations.
 
 ### Numerical Integration
 
-*   **Trapezoidal Rule**: Fits linear segments.
+*   **[Trapezoidal Rule](./Trapezoidal_Rule.c)**: Fits linear segments.
     $$\int_a^b f(x) \,dx \approx \frac{h}{2} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(a + ih) \right]$$
-*   **Simpson's 1/3 Rule**: Fits quadratic segments (requires $n$ to be even).
+*   **[Simpson's 1/3 Rule](./Simpson_1_by_3_Rule.c)**: Fits quadratic segments (requires $n$ to be even).
     $$\int_a^b f(x) \,dx \approx \frac{h}{3} \left[ f(a) + f(b) + 4 \sum_{i \text{ odd}} f(a + ih) + 2 \sum_{i \text{ even}} f(a + ih) \right]$$
-*   **Simpson's 3/8 Rule**: Fits cubic segments (requires $n$ to be divisible by 3).
+*   **[Simpson's 3/8 Rule](./Simpson_3_by_8_Rule.c)**: Fits cubic segments (requires $n$ to be divisible by 3).
     $$\int_a^b f(x) \,dx \approx \frac{3h}{8} \left[ f(a) + f(b) + 2 \sum_{i \text{ mult of 3}} f(a + ih) + 3 \sum_{i \text{ other}} f(a + ih) \right]$$
 
 ### Curve Fitting
 
-*   **Straight Line Fitting ($y = a + bx$)**: Fits a straight line to data points. Normal Equations:
+*   **[Straight Line Fitting ($y = a + bx$)](./Fit_Straight_Line_Curve_Fitting.c)**: Fits a straight line to data points. Normal Equations:
     $$\begin{aligned}
     n \cdot a + b \sum x &= \sum y \\
     a \sum x + b \sum x^2 &= \sum xy
     \end{aligned}$$
-*   **Parabola Fitting ($y = a + bx + cx^2$)**: Fits a second-degree polynomial. Normal Equations:
+*   **[Parabola Fitting ($y = a + bx + cx^2$)](./Fit_Parabola_Curve_Fitting.c)**: Fits a second-degree polynomial. Normal Equations:
     $$\begin{aligned}
     n \cdot a + b \sum x + c \sum x^2 &= \sum y \\
     a \sum x + b \sum x^2 + c \sum x^3 &= \sum xy \\
@@ -119,12 +119,12 @@ Numerical methods are the cornerstone of scientific computing, engineering, and 
 
 ### Differential Equations
 
-*   **Euler's Method**: Solve $dy/dx = f(x, y)$, $y(x_0) = y_0$.
+*   **[Euler's Method](./Euler_Method.c)**: Solve $dy/dx = f(x, y)$, $y(x_0) = y_0$.
     $$y_{n+1} = y_n + h \cdot f(x_n, y_n)$$
-*   **Taylor Series Method (2nd Order)**: Solves ODEs using derivatives.
+*   **[Taylor Series Method (2nd Order)](./Taylor_Series_Method.c)**: Solves ODEs using derivatives.
     $$y_{n+1} = y_n + h \cdot y'_n + \frac{h^2}{2} \cdot y''_n$$
     where $y'_n = f(x_n, y_n)$ and $y''_n = \frac{\partial f}{\partial x} + \frac{\partial f}{\partial y} f(x_n, y_n)$.
-*   **Runge-Kutta 4th Order (RK4) Method**: Highly accurate classical ODE solver.
+*   **[Runge-Kutta 4th Order (RK4) Method](./Runge_Kutta_Method.c)**: Highly accurate classical ODE solver.
     $$\begin{aligned}
     k_1 &= h \cdot f(x_n, y_n) \\
     k_2 &= h \cdot f\left(x_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
@@ -283,41 +283,39 @@ gcc -std=c99 -Wall -Wextra -Werror -o rk4 Runge_Kutta_Method.c -lm
 
 ## Project Structure
 
-```
-.
-├── audit_report.md                         # Numerical analysis code review audit
-├── Lab_Manual.md                           # University-style C practical guide
-├── Makefile                                # GNU Make automation script
-├── README.md                               # Repository overview & manual
-├── test_runner.py                          # Python automated local static testing runner
-│
-├── Bisection_Method.c
-├── Regula_Falsi_Method.c
-├── Newton_Raphson.c
-├── Secant_Method.c
-├── Iteration_Method.c
-│
-├── Newton_Forward_Interpolation_Method.c
-├── Newton_Backward_Interpolation_Method.c
-├── Lagrange_Interpolation_Method.c
-│
-├── Gauss_Elimination.c
-├── Gauss_Jordan.c
-├── Gauss_Jacobi.c
-├── Gauss_Seidel.c
-├── Matrix_Inversion.c
-│
-├── Trapezoidal_Rule.c
-├── Simpson_1_by_3_Rule.c
-├── Simpson_3_by_8_Rule.c
-│
-├── Fit_Straight_Line_Curve_Fitting.c
-├── Fit_Parabola_Curve_Fitting.c
-│
-├── Euler_Method.c
-├── Taylor_Series_Method.c
-└── Runge_Kutta_Method.c
-```
+- 📁 [root](.)
+  - 📝 [audit_report.md](./audit_report.md) — Numerical analysis code review audit
+  - 📝 [Lab_Manual.md](./Lab_Manual.md) — University-style C practical manual & exam guide
+  - 🛠️ [Makefile](./Makefile) — GNU Make build automation script
+  - 📖 [README.md](./README.md) — Main repository index & manual
+  - 🐍 [test_runner.py](./test_runner.py) — Python automated validation script
+  - 📁 **Root-Finding Algorithms**
+    - 📄 [Bisection_Method.c](./Bisection_Method.c)
+    - 📄 [Regula_Falsi_Method.c](./Regula_Falsi_Method.c)
+    - 📄 [Newton_Raphson.c](./Newton_Raphson.c)
+    - 📄 [Secant_Method.c](./Secant_Method.c)
+    - 📄 [Iteration_Method.c](./Iteration_Method.c)
+  - 📁 **Interpolation Methods**
+    - 📄 [Newton_Forward_Interpolation_Method.c](./Newton_Forward_Interpolation_Method.c)
+    - 📄 [Newton_Backward_Interpolation_Method.c](./Newton_Backward_Interpolation_Method.c)
+    - 📄 [Lagrange_Interpolation_Method.c](./Lagrange_Interpolation_Method.c)
+  - 📁 **Systems of Linear Equations**
+    - 📄 [Gauss_Elimination.c](./Gauss_Elimination.c)
+    - 📄 [Gauss_Jordan.c](./Gauss_Jordan.c)
+    - 📄 [Gauss_Jacobi.c](./Gauss_Jacobi.c)
+    - 📄 [Gauss_Seidel.c](./Gauss_Seidel.c)
+    - 📄 [Matrix_Inversion.c](./Matrix_Inversion.c)
+  - 📁 **Numerical Integration**
+    - 📄 [Trapezoidal_Rule.c](./Trapezoidal_Rule.c)
+    - 📄 [Simpson_1_by_3_Rule.c](./Simpson_1_by_3_Rule.c)
+    - 📄 [Simpson_3_by_8_Rule.c](./Simpson_3_by_8_Rule.c)
+  - 📁 **Curve Fitting**
+    - 📄 [Fit_Straight_Line_Curve_Fitting.c](./Fit_Straight_Line_Curve_Fitting.c)
+    - 📄 [Fit_Parabola_Curve_Fitting.c](./Fit_Parabola_Curve_Fitting.c)
+  - 📁 **Differential Equations (ODEs)**
+    - 📄 [Euler_Method.c](./Euler_Method.c)
+    - 📄 [Taylor_Series_Method.c](./Taylor_Series_Method.c)
+    - 📄 [Runge_Kutta_Method.c](./Runge_Kutta_Method.c)
 
 [↑ Back to Top](#table-of-contents)
 
