@@ -1,58 +1,109 @@
-//C Program to Fit a straight line on given points
+/*
+ * Curve Fitting: Straight Line (y = a + b * x)
+ * ============================================
+ * Finds the best-fit line through n observations using Least Squares Regression.
+ *
+ * Normal Equations:
+ *   n * a       + sum(x) * b = sum(y)
+ *   sum(x) * a  + sum(x^2) * b = sum(x*y)
+ *
+ * Solved using Cramer's Rule or elimination.
+ *
+ * Compile: gcc -std=c99 -Wall -Wextra -o fit_line Fit_Straight_Line_Curve_Fitting.c -lm
+ *
+ * Sample Input:
+ *   Enter no. of observations: 5
+ *   Enter values of x: 1 2 3 4 5
+ *   Enter values of y: 14 27 40 55 68
+ *
+ * Expected Output:
+ *   Intercept (a) = 0.00, Slope (b) = 13.60
+ *   Equation of The line: y = 0.00 + 13.60x
+ *
+ * BUGS FIXED FROM ORIGINAL:
+ *   1. Line 37 had `int ratio = ...` which truncated float division to integer.
+ *   2. float -> double
+ *   3. Added validation for n < 2
+ *   4. Guarded against division by zero (determinant check)
+ */
 
-#include<stdio.h>
-int main()
+#include <stdio.h>
+#include <math.h>
+
+#define MAX_POINTS 100
+
+int main(void)
 {
     int n;
-    float sum1=0,sum2=0,sum3=0,sum4=0,a,b;
-    //.............Input...................
-    printf("Enter no. of observations\n");
-    scanf("%d",&n);
-    float x[n],y[n],augmented_matrix[2][3];
-    printf("Enter values of x\n");
-    for(int i=0;i<n;i++)
-      scanf("%f",&x[i]);
-    printf("Enter values of y\n");
-    for(int i=0;i<n;i++)
-      scanf("%f",&y[i]); 
+    double sum_x = 0.0, sum_y = 0.0, sum_xy = 0.0, sum_x2 = 0.0;
+    double a, b, denom;
 
-    //....................Computations ............
-    for(int i=0;i<n;i++)
+    /* --- Input --- */
+    printf("Enter no. of observations: ");
+    if (scanf("%d", &n) != 1 || n < 2 || n > MAX_POINTS)
     {
-        sum1=sum1+x[i];
-        sum2=sum2+y[i];
-        sum3=sum3+x[i]*y[i];
-        sum4=sum4+x[i]*x[i];
+        fprintf(stderr, "Error: Number of observations must be between 2 and %d.\n", MAX_POINTS);
+        return 1;
     }
 
-    //finding slope and intercept
-    augmented_matrix[0][0]=n;
-    augmented_matrix[0][1]=sum1;
-    augmented_matrix[0][2]=sum2;
-    augmented_matrix[1][0]=sum1;
-    augmented_matrix[1][1]=sum4;
-    augmented_matrix[1][2]=sum3;
+    double x[MAX_POINTS], y[MAX_POINTS];
 
-    //solving it
-    int ratio=augmented_matrix[1][0]/augmented_matrix[0][0];
-    for(int i=0;i<3;i++)
-        augmented_matrix[1][i]=augmented_matrix[1][i]-ratio*augmented_matrix[0][i];
-    
-    //printing Upper Triangular matrix
-    printf("\nThe Upper Triangular Matrix:\n");
-    for(int i=0;i<2;i++)
+    printf("Enter %d values of x:\n", n);
+    for (int i = 0; i < n; i++)
     {
-        for(int j=0;j<3;j++)
-          printf("%.2f ",augmented_matrix[i][j]);
-        printf("\n");  
+        if (scanf("%lf", &x[i]) != 1)
+        {
+            fprintf(stderr, "Error: Invalid input for x[%d].\n", i);
+            return 1;
+        }
     }
 
-    //finding a and b by back substitution (a = intercept , b = slope)
-    b=augmented_matrix[1][2]/augmented_matrix[1][1];
-    a=(augmented_matrix[0][2]-augmented_matrix[0][1]*b)/augmented_matrix[0][0];
-    printf("\nIntercept = %.2f and Slope = %.2f\n\n",a,b); 
-    //..........................Output...................
-    printf("Equation of The line: y= %.2f + %.2fx",a,b);
+    printf("Enter %d values of y:\n", n);
+    for (int i = 0; i < n; i++)
+    {
+        if (scanf("%lf", &y[i]) != 1)
+        {
+            fprintf(stderr, "Error: Invalid input for y[%d].\n", i);
+            return 1;
+        }
+    }
 
+    /* --- Computations --- */
+    for (int i = 0; i < n; i++)
+    {
+        sum_x += x[i];
+        sum_y += y[i];
+        sum_xy += x[i] * y[i];
+        sum_x2 += x[i] * x[i];
+    }
 
+    /*
+     * Solving system:
+     *   [ n       sum_x  | sum_y  ]
+     *   [ sum_x   sum_x2 | sum_xy ]
+     *
+     * Determinant:
+     */
+    denom = n * sum_x2 - sum_x * sum_x;
+    if (fabs(denom) < 1e-15)
+    {
+        fprintf(stderr, "Error: Determinant is zero. Cannot fit line (all X values might be identical).\n");
+        return 1;
+    }
+
+    /* Cramer's Rule */
+    a = (sum_y * sum_x2 - sum_xy * sum_x) / denom; /* Intercept */
+    b = (n * sum_xy - sum_x * sum_y) / denom;      /* Slope */
+
+    /* --- Output --- */
+    printf("\n--- Results ---\n");
+    printf("Sum of X   = %.4f\n", sum_x);
+    printf("Sum of Y   = %.4f\n", sum_y);
+    printf("Sum of XY  = %.4f\n", sum_xy);
+    printf("Sum of X^2 = %.4f\n", sum_x2);
+    printf("\nIntercept (a) = %.4f\n", a);
+    printf("Slope (b)     = %.4f\n", b);
+    printf("\nEquation of The line: y = %.4f + %.4fx\n", a, b);
+
+    return 0;
 }

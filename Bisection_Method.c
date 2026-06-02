@@ -1,118 +1,128 @@
-//Bisection Method (Without Allowed Error Concept)
-#include<stdio.h>
-float findValueAt(float x)
+/*
+ * Bisection Method
+ * ================
+ * Finds a root of f(x) = 0 in the interval [a, b].
+ *
+ * Prerequisites:
+ *   - f(a) and f(b) must have opposite signs (IVT guarantees a root).
+ *
+ * Algorithm:
+ *   1. Compute midpoint c = (a + b) / 2.
+ *   2. If f(c) ≈ 0 or (b - a)/2 < tolerance, root found.
+ *   3. If f(a)·f(c) < 0, root is in [a, c]; else root is in [c, b].
+ *   4. Repeat until convergence or max iterations.
+ *
+ * Convergence: O(log2((b-a)/epsilon)) iterations guaranteed.
+ * Order of convergence: Linear (1).
+ *
+ * Compile: gcc -std=c99 -Wall -Wextra -o bisection Bisection_Method.c -lm
+ *
+ * Sample Input:
+ *   Enter interval [a, b]: 2 3
+ *   Enter tolerance (e.g. 0.0001): 0.0001
+ *   Enter max iterations: 100
+ *
+ * Expected Output:
+ *   Root ≈ 2.094551 (for f(x) = x³ - 2x - 5)
+ */
+
+#include <stdio.h>
+#include <math.h>
+
+/* ===== MODIFY THIS FUNCTION TO CHANGE THE EQUATION ===== */
+/*  f(x) = x^3 - 2x - 5                                   */
+/*  Known root: x ≈ 2.09455148                             */
+double f(double x)
 {
-   return x*x*x - 2*x -5;
+    return x * x * x - 2.0 * x - 5.0;
 }
+/* ======================================================== */
 
-float bisect(float x1,float x2)
+int main(void)
 {
-    return (x1+x2)/2;
-}
+    double a, b, c;
+    double fa, fb, fc;
+    double tolerance;
+    int max_iter, iter;
 
-int main()
-{
-    int maxIteration,i=1;
-    float x1,x2,x;
-    printf("Enter Maximum no of Iterations\n");
-    scanf("%d",&maxIteration);
-
-//......Compute x1 and x2............. 
-   
-   do
-   {
-        printf("Enter the value of x1 and x2(starting boundary)");
-        scanf("%f%f",&x1,&x2);
-        if(findValueAt(x1)*findValueAt(x2)>0)
-        {
-           printf("Roots are Invalid\n");
-           continue;
-        }
-        else
-        {
-            printf("Roots Lie between %f and %f\n",x1,x2);
-            break;
-
-        }
-    } while(1);
-
- //..........Find root............   
-   //x1 x2 ->finalised
-    while(i<=maxIteration)
-    {
-      x = bisect(x1,x2);   //find the mid point
-      if(findValueAt(x)*findValueAt(x1)<0)
-         x2=x;  //x2 is shifted   
-      else if(findValueAt(x)*findValueAt(x2)<0)
-         x1=x;  //x1 is shifted
-     printf("Iterations=%d  Roots=%f\n",i,x);   
-      
-      i++; 
+    /* --- Input --- */
+    printf("Enter interval [a, b]: ");
+    if (scanf("%lf %lf", &a, &b) != 2) {
+        fprintf(stderr, "Error: Invalid input for interval.\n");
+        return 1;
     }
-    printf("Root=%f  Total Iterations=%d",x,--i);
 
-    return 0;
-}
+    printf("Enter tolerance (e.g. 0.0001): ");
+    if (scanf("%lf", &tolerance) != 1 || tolerance <= 0.0) {
+        fprintf(stderr, "Error: Tolerance must be a positive number.\n");
+        return 1;
+    }
 
-//Bisection Method (With Allowed Error Concept)
-#include<stdio.h>
-#include<math.h>
-#define EPSILON 0.0001
-float findValueAt(float x)
-{
-   return x*x*x - 2*x -5;
-}
+    printf("Enter max iterations: ");
+    if (scanf("%d", &max_iter) != 1 || max_iter <= 0) {
+        fprintf(stderr, "Error: Max iterations must be a positive integer.\n");
+        return 1;
+    }
 
-float bisect(float x1,float x2)
-{
-    return (x1+x2)/2;
-}
-int main()
-{
-    int maxIteration,i=1;
-    float x1,x2,x3,x;
-    printf("Enter Maximum no of Iterations\n");
-    scanf("%d",&maxIteration);
-    
-   do
-   {
-        printf("Enter the value of x1 and x2(starting boundary->Initial Roots)");
-        scanf("%f%f",&x1,&x2);
-        if(findValueAt(x1)*findValueAt(x2)>0)
-        {
-           printf("Roots are Invalid\n");
-           continue;
+    /* --- Validate bracketing --- */
+    fa = f(a);
+    fb = f(b);
+
+    if (fa * fb > 0.0) {
+        fprintf(stderr, "Error: f(a) and f(b) must have opposite signs.\n");
+        fprintf(stderr, "  f(%.6f) = %.6f\n", a, fa);
+        fprintf(stderr, "  f(%.6f) = %.6f\n", b, fb);
+        return 1;
+    }
+
+    /* Check if an endpoint is already a root */
+    if (fabs(fa) < 1e-15) {
+        printf("Root = %.10f (exact at endpoint a)\n", a);
+        return 0;
+    }
+    if (fabs(fb) < 1e-15) {
+        printf("Root = %.10f (exact at endpoint b)\n", b);
+        return 0;
+    }
+
+    printf("\nRoots lie between %.6f and %.6f\n", a, b);
+    printf("%-10s %-15s %-15s %-15s %-15s\n",
+           "Iter", "a", "b", "c (midpoint)", "f(c)");
+    printf("---------------------------------------------------------------------\n");
+
+    /* --- Bisection iterations --- */
+    for (iter = 1; iter <= max_iter; iter++) {
+        c = a + (b - a) / 2.0;   /* avoids overflow vs (a+b)/2 */
+        fc = f(c);
+
+        printf("%-10d %-15.10f %-15.10f %-15.10f %-15.10f\n",
+               iter, a, b, c, fc);
+
+        /* Convergence check: root found or interval sufficiently small */
+        if (fabs(fc) < 1e-15 || (b - a) / 2.0 < tolerance) {
+            printf("\n✓ Converged after %d iterations.\n", iter);
+            printf("  Root    = %.10f\n", c);
+            printf("  f(root) = %.2e\n", fc);
+            printf("  Error  <= %.2e\n", (b - a) / 2.0);
+            return 0;
         }
-        else
-        {
-            printf("Roots Lie between %f and %f\n",x1,x2);
-            break;
 
+        /* Update interval */
+        if (fa * fc < 0.0) {
+            b = c;
+            fb = fc;
+        } else {
+            a = c;
+            fa = fc;
         }
-    } while(1);
+    }
 
-    //find the mid point
-    x = bisect(x1,x2);   
-
-    do
-    {
-      if(findValueAt(x)*findValueAt(x1)<0)
-         x2=x;    
-      else
-         x1=x;
-      printf("Iterations=%d  Roots=%f\n",i,x);   
-      x3 = bisect(x1,x2);  
-      if(fabs(x3-x)<EPSILON)
-      {
-          //print root
-          printf("Root=%f  Total Iterations=%d",x,i);
-          return 0;
-
-      }
-      x=x3;  //v.imp
-      i++; 
-    }while(i<=maxIteration);
-    printf("Root=%f  Total Iterations=%d",x,--i);
+    /* Did not converge within max iterations */
+    c = a + (b - a) / 2.0;
+    printf("\n✗ Did NOT converge within %d iterations.\n", max_iter);
+    printf("  Best approximation = %.10f\n", c);
+    printf("  f(approx)          = %.2e\n", f(c));
+    printf("  Remaining interval = %.2e\n", b - a);
 
     return 0;
 }
