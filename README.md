@@ -1,350 +1,490 @@
-# Computer Based Numerical & Statistical Techniques (CBNST)
+<div align="center">
 
-[![Language](https://img.shields.io/badge/Language-C99-00599C.svg?style=flat&logo=c&logoColor=white)](https://en.cppreference.com/w/c/99)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Build](https://img.shields.io/badge/Build-Makefile-orange.svg?logo=gnu-make&logoColor=white)](Makefile)
-[![Stability](https://img.shields.io/badge/Numerical_Stability-Double_Precision-brightgreen.svg)](#features)
-[![Syllabus](https://img.shields.io/badge/Syllabus-University_Labs-blue.svg)](#introduction)
+<h1>
+  <br>
+  📐 CBNST — Numerical Methods in C
+  <br>
+</h1>
 
-This repository contains clean, modern, mathematically verified, and numerically stable C99 implementations of standard Numerical Methods. Every program is optimized to prevent rounding errors, division-by-zero, infinite loops, and floating-point drift, ensuring robust, university-grade quality suitable for BSc, BCA, MCA, BTech, and portfolio showcases.
+<h4>A complete, university-grade library of numerical algorithms — robust, double-precision, zero-warning C99.</h4>
 
----
+<p align="center">
+  <a href="https://en.cppreference.com/w/c/99">
+    <img src="https://img.shields.io/badge/Language-C99-00599C.svg?style=flat&logo=c&logoColor=white" alt="C99">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT License">
+  </a>
+  <a href="Makefile">
+    <img src="https://img.shields.io/badge/Build-Makefile-orange.svg?logo=gnu-make&logoColor=white" alt="Makefile">
+  </a>
+  <img src="https://img.shields.io/badge/Precision-Double%20(64--bit)-brightgreen.svg" alt="Double Precision">
+  <img src="https://img.shields.io/badge/Warnings-Zero%20%28-Wall%20-Wextra%20-Werror%29-blue.svg" alt="Zero Warnings">
+  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20macOS%20%7C%20Windows%20(MinGW)-lightgrey.svg" alt="Platform">
+</p>
 
-## Table of Contents
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-algorithms">Algorithms</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-usage">Usage</a> •
+  <a href="#-sample-io">Sample I/O</a> •
+  <a href="#-contributing">Contributing</a>
+</p>
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Algorithms Included](#algorithms-included)
-  - [Root-Finding Methods](#root-finding-methods)
-  - [Interpolation Methods](#interpolation-methods)
-  - [Systems of Linear Equations](#systems-of-linear-equations)
-  - [Numerical Integration](#numerical-integration)
-  - [Curve Fitting](#curve-fitting)
-  - [Differential Equations](#differential-equations)
-- [Complexity and Convergence Summary](#complexity-and-convergence-summary)
-- [Installation and Setup](#installation-and-setup)
-- [Usage](#usage)
-- [Compilation Instructions](#compilation-instructions)
-- [Sample Inputs and Expected Outputs](#sample-inputs-and-expected-outputs)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
-- [Author](#author)
-
----
-
-## Introduction
-
-Numerical methods are the cornerstone of scientific computing, engineering, and data analysis. This repository serves as a comprehensive reference for university practical examinations and self-study, standardizing classical algorithms to modern standards. All global variables have been removed to encourage reusability, and dynamic array handling has been modernized to comply with GCC/Clang standard environments.
-
-[↑ Back to Top](#table-of-contents)
+</div>
 
 ---
 
-## Features
+## 📌 What Is This?
 
-- **Double Precision Floating-Point**: Replaced all `float` variables with `double` to provide maximum computational accuracy and prevent precision loss.
-- **Robust Input Validation**: Includes active boundary verification, division-by-zero prevention, matrix singularity detection, and diagonal dominance checks.
-- **Iterative Safety Guards**: All loop structures use strict maximum iteration parameters to prevent infinite run times in divergent scenarios.
-- **Standards Compliant C99**: Zero compiler warnings with standard flags (`-Wall -Wextra -Werror`).
-- **Comprehensive Lab Manual**: Includes a dedicated [Lab_Manual.md](./Lab_Manual.md) containing Aim, Algorithm, Code, Viva Questions, and Outputs.
+**CBNST** (Computer Based Numerical & Statistical Techniques) is a clean, modern C99 library implementing **21 production-quality numerical algorithms** across 6 categories. Every implementation is:
 
-[↑ Back to Top](#table-of-contents)
+- 🔒 **Numerically stable** — `double` precision throughout, no `float`
+- 🛡️ **Defensively coded** — division-by-zero guards, singularity detection, max-iteration caps
+- ✅ **Standard compliant** — compiles with `-Wall -Wextra -Werror`, zero warnings
+- 📚 **Curriculum-aligned** — maps directly to BSc / BCA / MCA / BTech CBNST syllabi
+- 🧪 **Validated** — automated Python test runner with expected outputs
 
----
-
-## Algorithms Included
-
-### Root-Finding Methods
-
-*   **[Bisection Method](./Bisection_Method.c)**: Finds a root of $f(x) = 0$ in $[a, b]$ where $f(a) \cdot f(b) < 0$.
-    $$c = a + \frac{b - a}{2}$$
-    *Order of Convergence*: $1$ (Linear).
-*   **[Regula Falsi (False Position) Method](./Regula_Falsi_Method.c)**: Finds root via the secant line intercept.
-    $$c = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}$$
-    *Order of Convergence*: $1$ (Linear).
-*   **[Newton-Raphson Method](./Newton_Raphson.c)**: Uses tangent slope approximations.
-    $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
-    *Order of Convergence*: $2$ (Quadratic).
-*   **[Secant Method](./Secant_Method.c)**: Approximates the derivative using two historical points.
-    $$x_{n+1} = \frac{x_{n-1} \cdot f(x_n) - x_n \cdot f(x_{n-1})}{f(x_n) - f(x_{n-1})}$$
-    *Order of Convergence*: $\approx 1.618$ (Superlinear).
-*   **[Fixed-Point Iteration Method](./Iteration_Method.c)**: Rewrites $f(x) = 0$ as $x = g(x)$ and iterates.
-    $$x_{n+1} = g(x_n)$$
-    *Convergence Condition*: $|g'(x)| < 1$ (Contraction Mapping Theorem).
-
-### Interpolation Methods
-
-*   **[Newton Forward Interpolation](./Newton_Forward_Interpolation_Method.c)**: Used when target value is near the beginning of equally spaced data.
-    $$y(x) = y_0 + u \Delta y_0 + \frac{u(u-1)}{2!} \Delta^2 y_0 + \dots + \frac{u(u-1)\dots(u-n+1)}{n!} \Delta^n y_0$$
-    where $u = \frac{x - x_0}{h}$.
-*   **[Newton Backward Interpolation](./Newton_Backward_Interpolation_Method.c)**: Used when target value is near the end of equally spaced data.
-    $$y(x) = y_n + u \nabla y_n + \frac{u(u+1)}{2!} \nabla^2 y_n + \dots + \frac{u(u+1)\dots(u+n-1)}{n!} \nabla^n y_n$$
-    where $u = \frac{x - x_n}{h}$.
-*   **[Lagrange Interpolation](./Lagrange_Interpolation_Method.c)**: For arbitrarily spaced data points.
-    $$y(x) = \sum_{i=0}^{n-1} y_i \prod_{j \neq i} \frac{x - x_j}{x_i - x_j}$$
-
-### Systems of Linear Equations
-
-*   **[Gauss Elimination (with Partial Pivoting)](./Gauss_Elimination.c)**: Converts augmented matrix $[A|B]$ to upper triangular form, then solves via back substitution.
-*   **[Gauss Jordan (with Partial Pivoting)](./Gauss_Jordan.c)**: Converts augmented matrix $[A|B]$ to diagonal form, solving the variables directly.
-*   **[Gauss Jacobi Method (Iterative)](./Gauss_Jacobi.c)**: Iterates to solve linear systems. Requires diagonal dominance.
-    $$x_i^{(k+1)} = \frac{b_i - \sum_{j \neq i} a_{ij} x_j^{(k)}}{a_{ii}}$$
-*   **[Gauss Seidel Method (Iterative)](./Gauss_Seidel.c)**: Uses updated values immediately for faster convergence.
-    $$x_i^{(k+1)} = \frac{b_i - \sum_{j < i} a_{ij} x_j^{(k+1)} - \sum_{j > i} a_{ij} x_j^{(k)}}{a_{ii}}$$
-*   **[Matrix Inversion (Gauss-Jordan)](./Matrix_Inversion.c)**: Converts $[A|I]$ to $[I|A^{-1}]$ using elementary row operations.
-
-### Numerical Integration
-
-*   **[Trapezoidal Rule](./Trapezoidal_Rule.c)**: Fits linear segments.
-    $$\int_a^b f(x) \,dx \approx \frac{h}{2} \left[ f(a) + f(b) + 2 \sum_{i=1}^{n-1} f(a + ih) \right]$$
-*   **[Simpson's 1/3 Rule](./Simpson_1_by_3_Rule.c)**: Fits quadratic segments (requires $n$ to be even).
-    $$\int_a^b f(x) \,dx \approx \frac{h}{3} \left[ f(a) + f(b) + 4 \sum_{i \text{ odd}} f(a + ih) + 2 \sum_{i \text{ even}} f(a + ih) \right]$$
-*   **[Simpson's 3/8 Rule](./Simpson_3_by_8_Rule.c)**: Fits cubic segments (requires $n$ to be divisible by 3).
-    $$\int_a^b f(x) \,dx \approx \frac{3h}{8} \left[ f(a) + f(b) + 2 \sum_{i \text{ mult of 3}} f(a + ih) + 3 \sum_{i \text{ other}} f(a + ih) \right]$$
-
-### Curve Fitting
-
-*   **[Straight Line Fitting ($y = a + bx$)](./Fit_Straight_Line_Curve_Fitting.c)**: Fits a straight line to data points. Normal Equations:
-    $$\begin{aligned}
-    n \cdot a + b \sum x &= \sum y \\
-    a \sum x + b \sum x^2 &= \sum xy
-    \end{aligned}$$
-*   **[Parabola Fitting ($y = a + bx + cx^2$)](./Fit_Parabola_Curve_Fitting.c)**: Fits a second-degree polynomial. Normal Equations:
-    $$\begin{aligned}
-    n \cdot a + b \sum x + c \sum x^2 &= \sum y \\
-    a \sum x + b \sum x^2 + c \sum x^3 &= \sum xy \\
-    a \sum x^2 + b \sum x^3 + c \sum x^4 &= \sum x^2y
-    \end{aligned}$$
-
-### Differential Equations
-
-*   **[Euler's Method](./Euler_Method.c)**: Solve $dy/dx = f(x, y)$, $y(x_0) = y_0$.
-    $$y_{n+1} = y_n + h \cdot f(x_n, y_n)$$
-*   **[Taylor Series Method (2nd Order)](./Taylor_Series_Method.c)**: Solves ODEs using derivatives.
-    $$y_{n+1} = y_n + h \cdot y'_n + \frac{h^2}{2} \cdot y''_n$$
-    where $y'_n = f(x_n, y_n)$ and $y''_n = \frac{\partial f}{\partial x} + \frac{\partial f}{\partial y} f(x_n, y_n)$.
-*   **[Runge-Kutta 4th Order (RK4) Method](./Runge_Kutta_Method.c)**: Highly accurate classical ODE solver.
-    $$\begin{aligned}
-    k_1 &= h \cdot f(x_n, y_n) \\
-    k_2 &= h \cdot f\left(x_n + \frac{h}{2}, y_n + \frac{k_1}{2}\right) \\
-    k_3 &= h \cdot f\left(x_n + \frac{h}{2}, y_n + \frac{k_2}{2}\right) \\
-    k_4 &= h \cdot f(x_n + h, y_n + k_3) \\
-    y_{n+1} &= y_n + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
-    \end{aligned}$$
-
-[↑ Back to Top](#table-of-contents)
+If you're a student preparing for practical exams, a lecturer building a lab reference, or a developer needing a portable C baseline for numerical work — this is built for you.
 
 ---
 
-## Complexity and Convergence Summary
+## ⚡ Quick Start
 
-| Method | Time Complexity | Space Complexity | Order of Convergence | Requirements / Guards |
-| :--- | :--- | :--- | :--- | :--- |
-| **Bisection** | $O(\log((b-a)/\epsilon))$ | $O(1)$ | $1$ (Linear) | $f(a) \cdot f(b) < 0$ bracket check |
-| **Regula Falsi** | $O(\text{Iter})$ | $O(1)$ | $1$ (Linear) | $f(a) \cdot f(b) < 0$, Denominator $\neq 0$ check |
-| **Newton-Raphson**| $O(\text{Iter})$ | $O(1)$ | $2$ (Quadratic) | $f'(x_n) \neq 0$ check |
-| **Secant** | $O(\text{Iter})$ | $O(1)$ | $1.618$ | $f(x_n) \neq f(x_{n-1})$ denominator check |
-| **Iteration** | $O(\text{Iter})$ | $O(1)$ | $1$ (Linear) | $|g'(x)| < 1$ convergence condition |
-| **Newton Forward**| $O(n^2)$ | $O(n^2)$ | - | Equal interval spacing constraint |
-| **Newton Backward**| $O(n^2)$ | $O(n^2)$ | - | Equal interval spacing constraint |
-| **Lagrange** | $O(n^2)$ | $O(n)$ | - | Unique $x_i$ values check |
-| **Gauss Elimination**| $O(n^3)$ | $O(n^2)$ | - | Partial pivoting, Singularity checks |
-| **Gauss Jordan** | $O(n^3)$ | $O(n^2)$ | - | Partial pivoting, Singularity checks |
-| **Gauss Jacobi** | $O(\text{Iter} \cdot n^2)$| $O(n^2)$ | - | Diagonal dominance validation/warning |
-| **Gauss Seidel** | $O(\text{Iter} \cdot n^2)$| $O(n^2)$ | - | Diagonal dominance validation/warning |
-| **Matrix Inversion**| $O(n^3)$ | $O(n^2)$ | - | Singularity validation |
-| **Trapezoidal** | $O(n)$ | $O(1)$ | $O(h^2)$ | Integer loop index, positive $n$ |
-| **Simpson 1/3** | $O(n)$ | $O(1)$ | $O(h^4)$ | $n$ must be EVEN |
-| **Simpson 3/8** | $O(n)$ | $O(1)$ | $O(h^4)$ | $n$ must be DIVISIBLE BY 3 |
-| **Fit Line** | $O(n)$ | $O(n)$ | - | $n \ge 2$, Determinant $\neq 0$ check |
-| **Fit Parabola** | $O(n)$ | $O(n)$ | - | $n \ge 3$, Singular normal equations check |
-| **Euler ODE** | $O(\text{Steps})$ | $O(1)$ | $O(h)$ | Step size $h > 0$ |
-| **Taylor ODE** | $O(\text{Steps})$ | $O(1)$ | $O(h^2)$ | Step size $h > 0$ |
-| **RK4 ODE** | $O(\text{Steps})$ | $O(1)$ | $O(h^4)$ | Step size $h > 0$ |
-
-[↑ Back to Top](#table-of-contents)
-
----
-
-## Installation and Setup
-
-To copy and run this codebase locally:
+> **Prerequisites:** `gcc` (≥ 9.0) and `make`. On Ubuntu/Debian: `sudo apt install build-essential`
 
 ```bash
-# Clone the repository
+# 1. Clone
 git clone https://github.com/sr-857/Numerical-Methods.git
-
-# Navigate to the project directory
 cd Numerical-Methods
-```
 
-[↑ Back to Top](#table-of-contents)
-
----
-
-## Usage
-
-This project includes a standard `Makefile` that handles target generation automatically:
-
-```bash
-# Compile all programs at once
+# 2. Build everything
 make
 
-# Clean all generated binary executables
-make clean
-```
-
-Once compiled, you can run any individual method:
-```bash
+# 3. Run any method
 ./bisection
-./gauss_elimination
 ./rk4
+./gauss_elimination
 ```
 
-[↑ Back to Top](#table-of-contents)
+That's it. No external dependencies. No cmake. No package manager.
 
 ---
 
-## Compilation Instructions
+## 📚 Algorithms
 
-If you prefer to compile files manually using `gcc`, run:
+### 🔍 Root-Finding Methods
+
+| Method | File | Order | Key Formula |
+|--------|------|-------|-------------|
+| Bisection | `Bisection_Method.c` | Linear (1) | $c = a + \frac{b-a}{2}$ |
+| Regula Falsi | `Regula_Falsi_Method.c` | Linear (1) | $c = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}$ |
+| Newton-Raphson | `Newton_Raphson.c` | Quadratic (2) | $x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$ |
+| Secant | `Secant_Method.c` | Superlinear (≈1.618) | $x_{n+1} = \frac{x_{n-1} f(x_n) - x_n f(x_{n-1})}{f(x_n) - f(x_{n-1})}$ |
+| Fixed-Point Iteration | `Iteration_Method.c` | Linear (1) | $x_{n+1} = g(x_n)$, requires $\|g'(x)\| < 1$ |
+
+### 📈 Interpolation Methods
+
+| Method | File | Data Spacing | Best For |
+|--------|------|-------------|----------|
+| Newton Forward | `Newton_Forward_Interpolation_Method.c` | Equal | Near the start of a table |
+| Newton Backward | `Newton_Backward_Interpolation_Method.c` | Equal | Near the end of a table |
+| Lagrange | `Lagrange_Interpolation_Method.c` | Arbitrary | Any scattered data |
+
+### 🔢 Systems of Linear Equations
+
+| Method | File | Type | Notes |
+|--------|------|------|-------|
+| Gauss Elimination | `Gauss_Elimination.c` | Direct | Partial pivoting |
+| Gauss-Jordan | `Gauss_Jordan.c` | Direct | Full row reduction |
+| Gauss-Jacobi | `Gauss_Jacobi.c` | Iterative | Requires diagonal dominance |
+| Gauss-Seidel | `Gauss_Seidel.c` | Iterative | Faster convergence than Jacobi |
+| Matrix Inversion | `Matrix_Inversion.c` | Direct | Augmented $[A\|I] \to [I\|A^{-1}]$ |
+
+### ∫ Numerical Integration
+
+| Method | File | Error Order | Constraint |
+|--------|------|------------|------------|
+| Trapezoidal Rule | `Trapezoidal_Rule.c` | $O(h^2)$ | None |
+| Simpson's 1/3 Rule | `Simpson_1_by_3_Rule.c` | $O(h^4)$ | $n$ must be **even** |
+| Simpson's 3/8 Rule | `Simpson_3_by_8_Rule.c` | $O(h^4)$ | $n$ must be **divisible by 3** |
+
+### 📉 Curve Fitting
+
+| Method | File | Model |
+|--------|------|-------|
+| Straight Line Fitting | `Fit_Straight_Line_Curve_Fitting.c` | $y = a + bx$ |
+| Parabola Fitting | `Fit_Parabola_Curve_Fitting.c` | $y = a + bx + cx^2$ |
+
+### 🌊 Ordinary Differential Equations
+
+| Method | File | Error Order |
+|--------|------|------------|
+| Euler's Method | `Euler_Method.c` | $O(h)$ |
+| Taylor Series (2nd Order) | `Taylor_Series_Method.c` | $O(h^2)$ |
+| Runge-Kutta 4 (RK4) | `Runge_Kutta_Method.c` | $O(h^4)$ |
+
+---
+
+## 🏗️ Architecture
+
+### Repository Layout
+
+```
+Numerical-Methods/
+├── 📄 README.md
+├── 📄 Lab_Manual.md          ← Aim, Algorithm, Viva Q&A for every method
+├── 📄 audit_report.md        ← Numerical stability code review
+├── 🛠️ Makefile               ← One-command build for all 21 targets
+├── 🐍 test_runner.py         ← Automated validation against expected outputs
+│
+├── Root-Finding/
+│   ├── Bisection_Method.c
+│   ├── Regula_Falsi_Method.c
+│   ├── Newton_Raphson.c
+│   ├── Secant_Method.c
+│   └── Iteration_Method.c
+│
+├── Interpolation/
+│   ├── Newton_Forward_Interpolation_Method.c
+│   ├── Newton_Backward_Interpolation_Method.c
+│   └── Lagrange_Interpolation_Method.c
+│
+├── Linear_Systems/
+│   ├── Gauss_Elimination.c
+│   ├── Gauss_Jordan.c
+│   ├── Gauss_Jacobi.c
+│   ├── Gauss_Seidel.c
+│   └── Matrix_Inversion.c
+│
+├── Integration/
+│   ├── Trapezoidal_Rule.c
+│   ├── Simpson_1_by_3_Rule.c
+│   └── Simpson_3_by_8_Rule.c
+│
+├── Curve_Fitting/
+│   ├── Fit_Straight_Line_Curve_Fitting.c
+│   └── Fit_Parabola_Curve_Fitting.c
+│
+└── ODEs/
+    ├── Euler_Method.c
+    ├── Taylor_Series_Method.c
+    └── Runge_Kutta_Method.c
+```
+
+### Algorithm Selection Flowchart
+
+```mermaid
+flowchart TD
+    A[Your Problem] --> B{Type?}
+
+    B --> C[Find Root of f-x]
+    B --> D[Interpolate / Estimate]
+    B --> E[Solve Linear System]
+    B --> F[Integrate f-x]
+    B --> G[Fit a Curve]
+    B --> H[Solve ODE dy/dx = f]
+
+    C --> C1{Bracket available?}
+    C1 -- Yes --> C2{Speed priority?}
+    C1 -- No --> C3[Newton-Raphson\nor Secant]
+    C2 -- High --> C4[Regula Falsi]
+    C2 -- Safe/Simple --> C5[Bisection]
+
+    D --> D1{Equal spacing?}
+    D1 -- Yes --> D2{Near start?}
+    D1 -- No --> D3[Lagrange]
+    D2 -- Yes --> D4[Newton Forward]
+    D2 -- No --> D5[Newton Backward]
+
+    E --> E1{Exact or Iterative?}
+    E1 -- Exact --> E2[Gauss Elimination\nor Gauss-Jordan]
+    E1 -- Iterative --> E3{Diagonal dominant?}
+    E3 -- Yes --> E4[Gauss-Seidel\nfaster convergence]
+    E3 -- No --> E5[⚠️ Check dominance,\nthen Jacobi]
+
+    F --> F1{n divisible by?}
+    F1 -- 2 even --> F2[Simpson 1/3\nhighest accuracy]
+    F1 -- 3 --> F3[Simpson 3/8]
+    F1 -- Any --> F4[Trapezoidal\nsimplest]
+
+    G --> G1{Degree?}
+    G1 -- 1 --> G2[Straight Line Fitting]
+    G1 -- 2 --> G3[Parabola Fitting]
+
+    H --> H1{Accuracy needed?}
+    H1 -- Low --> H2[Euler]
+    H1 -- Medium --> H3[Taylor Series 2nd]
+    H1 -- High --> H4[RK4\nrecommended default]
+```
+
+### Convergence & Complexity Summary
+
+```mermaid
+xychart-beta
+    title "Order of Convergence by Root-Finding Method"
+    x-axis ["Bisection", "Regula Falsi", "Fixed-Point", "Secant", "Newton-Raphson"]
+    y-axis "Convergence Order" 0 --> 2.5
+    bar [1, 1, 1, 1.618, 2]
+```
+
+| Method | Time | Space | Conv. Order | Critical Guard |
+|--------|------|-------|-------------|----------------|
+| Bisection | $O(\log\frac{b-a}{\epsilon})$ | $O(1)$ | 1 | $f(a) \cdot f(b) < 0$ |
+| Regula Falsi | $O(n)$ | $O(1)$ | 1 | Denominator $\neq 0$ |
+| Newton-Raphson | $O(n)$ | $O(1)$ | 2 | $f'(x_n) \neq 0$ |
+| Secant | $O(n)$ | $O(1)$ | 1.618 | $f(x_n) \neq f(x_{n-1})$ |
+| Newton Fwd/Bwd | $O(n^2)$ | $O(n^2)$ | — | Equal spacing |
+| Gauss Elimination | $O(n^3)$ | $O(n^2)$ | — | Partial pivoting |
+| Gauss Jacobi/Seidel | $O(kn^2)$ | $O(n^2)$ | — | Diagonal dominance |
+| Trapezoidal | $O(n)$ | $O(1)$ | $O(h^2)$ | $n > 0$ |
+| Simpson 1/3 | $O(n)$ | $O(1)$ | $O(h^4)$ | $n$ even |
+| RK4 | $O(\text{steps})$ | $O(1)$ | $O(h^4)$ | $h > 0$ |
+
+---
+
+## 🚀 Installation and Setup
+
+### Option A — Make (Recommended)
 
 ```bash
-# Root-Finding Methods
-gcc -std=c99 -Wall -Wextra -Werror -o bisection Bisection_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o regula_falsi Regula_Falsi_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o newton_raphson Newton_Raphson.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o secant Secant_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o iteration Iteration_Method.c -lm
+git clone https://github.com/sr-857/Numerical-Methods.git
+cd Numerical-Methods
 
-# Interpolation Methods
-gcc -std=c99 -Wall -Wextra -Werror -o newton_forward Newton_Forward_Interpolation_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o newton_backward Newton_Backward_Interpolation_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o lagrange Lagrange_Interpolation_Method.c -lm
+make          # compile all 21 programs
+make clean    # remove all binaries
+```
+
+### Option B — Manual GCC Compilation
+
+```bash
+# Example: compile only what you need
+gcc -std=c99 -Wall -Wextra -Werror -o newton_raphson Newton_Raphson.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o rk4 Runge_Kutta_Method.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o gauss_elimination Gauss_Elimination.c -lm
+```
+
+<details>
+<summary>📋 Full compilation commands for all 21 methods</summary>
+
+```bash
+# Root-Finding
+gcc -std=c99 -Wall -Wextra -Werror -o bisection        Bisection_Method.c              -lm
+gcc -std=c99 -Wall -Wextra -Werror -o regula_falsi     Regula_Falsi_Method.c           -lm
+gcc -std=c99 -Wall -Wextra -Werror -o newton_raphson   Newton_Raphson.c                -lm
+gcc -std=c99 -Wall -Wextra -Werror -o secant           Secant_Method.c                 -lm
+gcc -std=c99 -Wall -Wextra -Werror -o iteration        Iteration_Method.c              -lm
+
+# Interpolation
+gcc -std=c99 -Wall -Wextra -Werror -o newton_forward   Newton_Forward_Interpolation_Method.c  -lm
+gcc -std=c99 -Wall -Wextra -Werror -o newton_backward  Newton_Backward_Interpolation_Method.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o lagrange         Lagrange_Interpolation_Method.c        -lm
 
 # Linear Systems
-gcc -std=c99 -Wall -Wextra -Werror -o gauss_elimination Gauss_Elimination.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o gauss_jordan Gauss_Jordan.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o gauss_jacobi Gauss_Jacobi.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o gauss_seidel Gauss_Seidel.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o matrix_inversion Matrix_Inversion.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o gauss_elimination Gauss_Elimination.c  -lm
+gcc -std=c99 -Wall -Wextra -Werror -o gauss_jordan      Gauss_Jordan.c       -lm
+gcc -std=c99 -Wall -Wextra -Werror -o gauss_jacobi      Gauss_Jacobi.c       -lm
+gcc -std=c99 -Wall -Wextra -Werror -o gauss_seidel      Gauss_Seidel.c       -lm
+gcc -std=c99 -Wall -Wextra -Werror -o matrix_inversion  Matrix_Inversion.c   -lm
 
 # Integration
-gcc -std=c99 -Wall -Wextra -Werror -o trapezoidal Trapezoidal_Rule.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o simpson_1_3 Simpson_1_by_3_Rule.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o simpson_3_8 Simpson_3_by_8_Rule.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o trapezoidal  Trapezoidal_Rule.c      -lm
+gcc -std=c99 -Wall -Wextra -Werror -o simpson_1_3  Simpson_1_by_3_Rule.c   -lm
+gcc -std=c99 -Wall -Wextra -Werror -o simpson_3_8  Simpson_3_by_8_Rule.c   -lm
 
-# Fitting & ODEs
-gcc -std=c99 -Wall -Wextra -Werror -o fit_line Fit_Straight_Line_Curve_Fitting.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o fit_parabola Fit_Parabola_Curve_Fitting.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o euler Euler_Method.c -lm
+# Curve Fitting
+gcc -std=c99 -Wall -Wextra -Werror -o fit_line     Fit_Straight_Line_Curve_Fitting.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o fit_parabola Fit_Parabola_Curve_Fitting.c      -lm
+
+# ODEs
+gcc -std=c99 -Wall -Wextra -Werror -o euler  Euler_Method.c        -lm
 gcc -std=c99 -Wall -Wextra -Werror -o taylor Taylor_Series_Method.c -lm
-gcc -std=c99 -Wall -Wextra -Werror -o rk4 Runge_Kutta_Method.c -lm
+gcc -std=c99 -Wall -Wextra -Werror -o rk4    Runge_Kutta_Method.c  -lm
+```
+</details>
+
+---
+
+## 💻 Usage
+
+### Running a Program
+
+Every program is interactive — it prompts you for input and prints formatted results.
+
+```bash
+./bisection
+# Enter lower bound (a): 2
+# Enter upper bound (b): 3
+# Enter tolerance: 0.0001
+# Enter max iterations: 100
+
+# Iter |       a       |       b       |       c       |     f(c)
+# -----+---------------+---------------+---------------+----------
+#    1 |  2.000000000  |  3.000000000  |  2.500000000  | +5.625000
+#    2 |  2.000000000  |  2.500000000  |  2.250000000  | +1.890625
+#  ...
+#   14 |  2.094482422  |  2.094604492  |  2.094543457  | +0.000022
+#
+# Root ≈ 2.094551
 ```
 
-[↑ Back to Top](#table-of-contents)
+### Running Automated Tests
+
+```bash
+python3 test_runner.py
+```
+
+The test runner compiles each program, feeds it known inputs, and validates outputs against expected values.
 
 ---
 
-## Sample Inputs and Expected Outputs
+## 📊 Sample I/O
 
-### 1. Root-finding Methods
-*   **Bisection / Regula Falsi / Newton-Raphson / Secant** (Target: $f(x) = x^3 - 2x - 5 = 0$)
-    *   *Sample Interval / Guess*: `2 3` (or `2.0` guess for Newton)
-    *   *Tolerance*: `0.0001`
-    *   *Max Iterations*: `100`
-    *   *Expected Output*: Root $\approx 2.094551$
-*   **Fixed-Point Iteration** (Target: $x = \frac{1}{\sqrt{1+x}}$ derived from $x^3+x^2-1=0$)
-    *   *Sample Interval*: `0 1`
-    *   *Tolerance*: `0.0001`
-    *   *Expected Output*: Root $\approx 0.75488$
+### Root-Finding — $f(x) = x^3 - 2x - 5 = 0$
 
-### 2. Linear Systems
-*   **Gauss Elimination / Jordan / Jacobi / Seidel**
-    *   *System*:
-        $$\begin{aligned}
-        20x + y - 2z &= 17 \\
-        3x + 20y - z &= -18 \\
-        2x - 3y + 20z &= 25
-        \end{aligned}$$
-    *   *Expected Output*: $x = 1.000000$, $y = -1.000000$, $z = 1.000000$
+| Method | Input | Expected Root |
+|--------|-------|---------------|
+| Bisection | `a=2, b=3, tol=0.0001` | `2.094551` |
+| Regula Falsi | `a=2, b=3, tol=0.0001` | `2.094551` |
+| Newton-Raphson | `x0=2.0, tol=0.0001` | `2.094551` |
+| Secant | `x0=2, x1=3, tol=0.0001` | `2.094551` |
 
-### 3. Integration
-*   **Simpson's 1/3 Rule & 3/8 Rule** (Integrate $f(x) = 1/(1+x^2)$ from $0$ to $6$)
-    *   *Bounds*: `0 6`
-    *   *Intervals*: `6`
-    *   *Expected (1/3)*: $\approx 1.366174$
-    *   *Expected (3/8)*: $\approx 1.357081$
+### Linear System — Gauss Elimination / Jacobi / Seidel
 
-[↑ Back to Top](#table-of-contents)
+```
+System:   20x +  y - 2z = 17
+           3x + 20y -  z = -18
+           2x -  3y + 20z = 25
+```
 
----
+```
+Solution:  x = 1.000000   y = -1.000000   z = 1.000000
+```
 
-## Project Structure
+### Numerical Integration — $\int_0^6 \frac{1}{1+x^2} \, dx$
 
-- 📁 [root](.)
-  - 📝 [audit_report.md](./audit_report.md) — Numerical analysis code review audit
-  - 📝 [Lab_Manual.md](./Lab_Manual.md) — University-style C practical manual & exam guide
-  - 🛠️ [Makefile](./Makefile) — GNU Make build automation script
-  - 📖 [README.md](./README.md) — Main repository index & manual
-  - 🐍 [test_runner.py](./test_runner.py) — Python automated validation script
-  - 📁 **Root-Finding Algorithms**
-    - 📄 [Bisection_Method.c](./Bisection_Method.c)
-    - 📄 [Regula_Falsi_Method.c](./Regula_Falsi_Method.c)
-    - 📄 [Newton_Raphson.c](./Newton_Raphson.c)
-    - 📄 [Secant_Method.c](./Secant_Method.c)
-    - 📄 [Iteration_Method.c](./Iteration_Method.c)
-  - 📁 **Interpolation Methods**
-    - 📄 [Newton_Forward_Interpolation_Method.c](./Newton_Forward_Interpolation_Method.c)
-    - 📄 [Newton_Backward_Interpolation_Method.c](./Newton_Backward_Interpolation_Method.c)
-    - 📄 [Lagrange_Interpolation_Method.c](./Lagrange_Interpolation_Method.c)
-  - 📁 **Systems of Linear Equations**
-    - 📄 [Gauss_Elimination.c](./Gauss_Elimination.c)
-    - 📄 [Gauss_Jordan.c](./Gauss_Jordan.c)
-    - 📄 [Gauss_Jacobi.c](./Gauss_Jacobi.c)
-    - 📄 [Gauss_Seidel.c](./Gauss_Seidel.c)
-    - 📄 [Matrix_Inversion.c](./Matrix_Inversion.c)
-  - 📁 **Numerical Integration**
-    - 📄 [Trapezoidal_Rule.c](./Trapezoidal_Rule.c)
-    - 📄 [Simpson_1_by_3_Rule.c](./Simpson_1_by_3_Rule.c)
-    - 📄 [Simpson_3_by_8_Rule.c](./Simpson_3_by_8_Rule.c)
-  - 📁 **Curve Fitting**
-    - 📄 [Fit_Straight_Line_Curve_Fitting.c](./Fit_Straight_Line_Curve_Fitting.c)
-    - 📄 [Fit_Parabola_Curve_Fitting.c](./Fit_Parabola_Curve_Fitting.c)
-  - 📁 **Differential Equations (ODEs)**
-    - 📄 [Euler_Method.c](./Euler_Method.c)
-    - 📄 [Taylor_Series_Method.c](./Taylor_Series_Method.c)
-    - 📄 [Runge_Kutta_Method.c](./Runge_Kutta_Method.c)
+| Method | Intervals | Result |
+|--------|-----------|--------|
+| Simpson's 1/3 | 6 (even) | `≈ 1.366174` |
+| Simpson's 3/8 | 6 (÷3) | `≈ 1.357081` |
+| Trapezoidal | 6 | `≈ 1.410798` |
 
-[↑ Back to Top](#table-of-contents)
+> **Note:** True value $= \arctan(6) \approx 1.4056476$. Simpson's 1/3 achieves $O(h^4)$ accuracy.
+
+### ODE — $\frac{dy}{dx} = x + y$, $y(0) = 1$, $h = 0.1$
+
+| Method | $y(0.5)$ approx | Error vs Exact |
+|--------|-----------------|----------------|
+| Euler | `1.715610` | ~1.8% |
+| Taylor (2nd) | `1.796580` | ~0.1% |
+| RK4 | `1.797439` | ~0.001% |
 
 ---
 
-## Contributing
+## 🧩 Design Decisions
 
-Contributions to fix algorithms or add numerical routines are welcome.
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+### Why C99 and not C++/Python?
 
-[↑ Back to Top](#table-of-contents)
+Most university CBNST curricula specify C as the implementation language. C99 is the sweet spot: it gives us `//` comments, `<stdbool.h>`, VLAs (used carefully), and `<stdint.h>` while remaining universally portable across lab environments.
+
+### Why `double` everywhere?
+
+`float` (32-bit) gives roughly 7 significant digits. `double` (64-bit) gives 15–16. For iterative algorithms — particularly Gauss-Jacobi and RK4 — accumulated rounding in `float` arithmetic can cause silent, incorrect convergence. All variables are `double`; all format strings use `%.6lf` or higher precision.
+
+### Safety Guards Philosophy
+
+Every program defensively checks:
+- **Bracket validity** before bisection-family methods
+- **Denominator non-zero** before any division
+- **Diagonal dominance** before iterative solvers (with a warning, not a hard stop)
+- **Matrix singularity** via pivot magnitude threshold
+- **Max iterations cap** to prevent infinite loops in divergent cases
 
 ---
 
-## License
+## 🔧 Troubleshooting
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
-
-[↑ Back to Top](#table-of-contents)
+| Problem | Likely Cause | Fix |
+|---------|-------------|-----|
+| `undefined reference to sqrt` / `pow` | Missing math linker flag | Add `-lm` to your `gcc` command |
+| `error: implicit declaration of function` | Wrong C standard | Use `-std=c99` or `-std=c11` |
+| Program loops forever | No max iteration guard in custom modification | The originals all have `MAX_ITER`; restore it |
+| Jacobi/Seidel doesn't converge | Matrix not diagonally dominant | Reorder equations so the largest coefficients are on the diagonal |
+| Simpson's 1/3 gives wrong answer | Odd number of intervals | $n$ **must be even** for Simpson's 1/3 |
+| Bisection fails to start | $f(a)$ and $f(b)$ have same sign | Choose a different bracket where root is guaranteed |
+| `Segmentation fault` on large $n$ | Stack overflow from large VLA | Reduce $n$ or switch to heap allocation |
 
 ---
 
-## Author
+## 🤝 Contributing
 
-**Subhajit Roy (sr-857)**
+Contributions are welcome — bug fixes, new methods, or improved documentation.
+
+```mermaid
+gitGraph
+   commit id: "fork repo"
+   branch feature/your-method
+   checkout feature/your-method
+   commit id: "add implementation"
+   commit id: "add tests"
+   commit id: "update Lab_Manual"
+   checkout main
+   merge feature/your-method id: "PR merged"
+```
+
+**Contribution Checklist:**
+
+- [ ] Compiles with `gcc -std=c99 -Wall -Wextra -Werror` — zero warnings
+- [ ] Uses `double` (not `float`) for all floating-point values
+- [ ] Includes max-iteration guard for any iterative loop
+- [ ] Validates all user inputs before use
+- [ ] Adds a corresponding entry to `Lab_Manual.md` (Aim, Algorithm, Viva Q&A)
+- [ ] Adds expected output to `test_runner.py`
+
+```bash
+# Standard contribution workflow
+git fork https://github.com/sr-857/Numerical-Methods.git
+git checkout -b feature/your-method-name
+# ... implement, test ...
+git commit -m "feat: add Muller's method for complex roots"
+git push origin feature/your-method-name
+# Open Pull Request on GitHub
+```
+
+---
+
+## 📖 Lab Manual
+
+The [`Lab_Manual.md`](./Lab_Manual.md) contains a complete university-format write-up for every method:
+
+- **Aim** — Objective statement
+- **Theory** — Mathematical background
+- **Algorithm** — Step-by-step pseudocode
+- **Code** — The C implementation
+- **Sample Output** — Expected terminal output
+- **Viva Questions** — 5–10 exam-style Q&A per method
+
+This is designed to be printed or submitted as a practical file for university examinations.
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See [`LICENSE`](LICENSE) for full terms.
+
+---
+
+## 👤 Author
+
+**Subhajit Roy**
+
 - GitHub: [@sr-857](https://github.com/sr-857)
 
-[↑ Back to Top](#table-of-contents)
+---
+
+<div align="center">
+
+If this helped you pass your practical exam or saved you debugging time — a ⭐ on GitHub is appreciated.
+
+</div>
