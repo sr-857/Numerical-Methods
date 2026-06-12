@@ -160,43 +160,43 @@ Covers the full standard CBNST syllabus:
 
 ```mermaid
 graph TB
-    subgraph User["👤 User / Student"]
-        CLI["Terminal (stdin/stdout)"]
+    subgraph User[User and Student]
+        CLI[Terminal - stdin and stdout]
     end
 
-    subgraph Build["🔨 Build System"]
-        MF["Makefile\n(GNU Make)"]
-        GCC["gcc -std=c99\n-Wall -Wextra -Werror -lm"]
+    subgraph Build[Build System]
+        MF[Makefile - GNU Make]
+        GCC[gcc -std=c99 -Wall -Wextra -Werror -lm]
     end
 
-    subgraph Source["📁 Source Modules"]
+    subgraph Source[Source Modules]
         direction TB
-        RF["Root-Finding\n5 programs"]
-        IP["Interpolation\n3 programs"]
-        LS["Linear Systems\n5 programs"]
-        NI["Numerical Integration\n3 programs"]
-        CF["Curve Fitting\n2 programs"]
-        OD["ODEs\n3 programs"]
+        RF[Root-Finding - 5 programs]
+        IP[Interpolation - 3 programs]
+        LS[Linear Systems - 5 programs]
+        NI[Numerical Integration - 3 programs]
+        CF[Curve Fitting - 2 programs]
+        OD[ODEs - 3 programs]
     end
 
-    subgraph Binaries["⚙️ Compiled Binaries"]
-        B1["bisection, newton_raphson, ..."]
-        B2["lagrange, newton_forward, ..."]
-        B3["gauss_elimination, rk4, ..."]
+    subgraph Binaries[Compiled Binaries]
+        B1[bisection, newton_raphson, ...]
+        B2[lagrange, newton_forward, ...]
+        B3[gauss_elimination, rk4, ...]
     end
 
-    subgraph QA["🧪 Quality Assurance"]
-        TR["test_runner.py\n(Python 3)"]
-        AR["audit_report.md"]
-        LM["Lab_Manual.md"]
+    subgraph QA[Quality Assurance]
+        TR[test_runner.py - Python 3]
+        AR[audit_report.md]
+        LM[Lab_Manual.md]
     end
 
     CLI --> Binaries
     MF --> GCC
     GCC --> Source
     Source --> Binaries
-    TR -->|"compile + feed stdin"| Binaries
-    TR -->|"diff expected output"| QA
+    TR -->|compile and feed stdin| Binaries
+    TR -->|diff expected output| QA
 ```
 
 ### Program Execution Flow
@@ -204,7 +204,7 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant P as Program (e.g. ./rk4)
+    participant P as "Program e.g. ./rk4"
     participant V as Validator
     participant C as Compute Loop
     participant O as Output
@@ -258,40 +258,40 @@ C99 was chosen over C89 and C11 for three reasons:
 flowchart TD
     START([Your Numerical Problem]) --> PTYPE{Problem Type?}
 
-    PTYPE -->|"Find x where f(x)=0"| ROOT{Root-Finding}
-    PTYPE -->|"Estimate f(x) from table"| INTERP{Interpolation}
-    PTYPE -->|"Solve Ax = b"| LINEAR{Linear System}
-    PTYPE -->|"Compute ∫f(x)dx"| INTEG{Integration}
-    PTYPE -->|"Fit curve to data"| CURVE{Curve Fitting}
-    PTYPE -->|"Solve dy/dx = f(x,y)"| ODE{ODE Solver}
+    PTYPE -->|Find root of f| ROOT{Root-Finding}
+    PTYPE -->|Estimate from table| INTERP{Interpolation}
+    PTYPE -->|Solve Ax = b| LINEAR{Linear System}
+    PTYPE -->|Integrate f| INTEG{Integration}
+    PTYPE -->|Fit curve to data| CURVE{Curve Fitting}
+    PTYPE -->|Solve ODE| ODE{ODE Solver}
 
-    ROOT -->|"Bracket [a,b] available"| RFBR{Speed vs Safety?}
-    ROOT -->|"Only a guess x₀"| NR[Newton-Raphson\nor Secant]
-    RFBR -->|"Max safety"| BS[Bisection]
-    RFBR -->|"Faster convergence"| RF[Regula Falsi]
+    ROOT -->|Bracket a,b available| RFBR{Speed vs Safety?}
+    ROOT -->|Only a guess x0| NR[Newton-Raphson or Secant]
+    RFBR -->|Max safety| BS[Bisection]
+    RFBR -->|Faster convergence| RF[Regula Falsi]
 
-    INTERP -->|"Equal spacing"| EQ{Target near...?}
-    INTERP -->|"Unequal spacing"| LG[Lagrange]
-    EQ -->|"Start of table"| NF[Newton Forward]
-    EQ -->|"End of table"| NB[Newton Backward]
+    INTERP -->|Equal spacing| EQ{Target near?}
+    INTERP -->|Unequal spacing| LG[Lagrange]
+    EQ -->|Start of table| NF[Newton Forward]
+    EQ -->|End of table| NB[Newton Backward]
 
-    LINEAR -->|"Direct, exact"| DE{Size?"} 
-    LINEAR -->|"Iterative, large sparse"| DD{Diag dominant?}
-    DE -->|"Need inverse too"| GJO[Gauss-Jordan\nor Matrix Inv.]
-    DE -->|"Solution only"| GE[Gauss Elimination]
-    DD -->|"Yes"| GS[Gauss-Seidel\nfaster]
-    DD -->|"Uncertain"| GJ[Gauss-Jacobi\nwith warning]
+    LINEAR -->|Direct exact| DE{Size?}
+    LINEAR -->|Iterative large sparse| DD{Diag dominant?}
+    DE -->|Need inverse too| GJO[Gauss-Jordan or Matrix Inv]
+    DE -->|Solution only| GE[Gauss Elimination]
+    DD -->|Yes| GS[Gauss-Seidel - faster]
+    DD -->|Uncertain| GJ[Gauss-Jacobi - with warning]
 
-    INTEG -->|"n even"| S13[Simpson 1/3\nO(h⁴)]
-    INTEG -->|"n divisible by 3"| S38[Simpson 3/8\nO(h⁴)]
-    INTEG -->|"Any n"| TR[Trapezoidal\nO(h²)]
+    INTEG -->|n even| S13[Simpson 1/3 - O h4]
+    INTEG -->|n divisible by 3| S38[Simpson 3/8 - O h4]
+    INTEG -->|Any n| TR[Trapezoidal - O h2]
 
-    CURVE -->|"Linear trend"| SL[Straight Line\ny = a + bx]
-    CURVE -->|"Curved trend"| PB[Parabola\ny = a+bx+cx²]
+    CURVE -->|Linear trend| SL[Straight Line Fit]
+    CURVE -->|Curved trend| PB[Parabola Fit]
 
-    ODE -->|"Quick estimate"| EU[Euler\nO(h)]
-    ODE -->|"Moderate accuracy"| TS[Taylor Series\nO(h²)]
-    ODE -->|"High accuracy"| RK[RK4 ← recommended\nO(h⁴)]
+    ODE -->|Quick estimate| EU[Euler - O h]
+    ODE -->|Moderate accuracy| TS[Taylor Series - O h2]
+    ODE -->|High accuracy| RK[RK4 - recommended O h4]
 ```
 
 ### Convergence & Complexity Summary
@@ -987,7 +987,7 @@ python3 test_runner.py
 sequenceDiagram
     participant TR as test_runner.py
     participant SH as Shell
-    participant BIN as Binary (e.g. ./bisection)
+    participant BIN as "Binary e.g. bisection"
 
     TR->>SH: subprocess.run(["./bisection"], input=test_input)
     SH->>BIN: launch with piped stdin
